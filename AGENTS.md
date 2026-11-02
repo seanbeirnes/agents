@@ -31,8 +31,11 @@ The over-arching points are:
   looks similar.
 - Choose clear, descriptive method and variable names.
 - Prefer deep modules over shallow interfaces.
-- Use comments sparingly and only when you need to say *why* the code is there.
-  Comments are not for telling *what* the code does, nor are they for documenting ticket/issue numbers, etc.
+- Document interfaces: give each exported function, method, class, and type a
+  short doc comment (e.g. a one-line JSDoc) saying what it does or represents.
+- Otherwise, use comments sparingly and only when you need to say *why* the code
+  is there. Inline comments and extended doc comments are not for telling *what*
+  the code does, nor are they for documenting ticket/issue numbers, etc.
 
 ## Session State
 
