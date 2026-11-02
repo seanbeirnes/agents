@@ -50,7 +50,7 @@ link() {
 		run mv "$path" "$path.backup-$stamp"
 	fi
 	run ln -s "$target" "$path"
-	say "linked   $path -> $target"
+	[ $dry_run = 1 ] || say "linked   $path -> $target"
 }
 
 if ! command -v jq >/dev/null 2>&1; then
