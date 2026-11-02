@@ -6,7 +6,11 @@
     "pr": ""
   },
   "permissions": {
+    "additionalDirectories": ["~/agents"],
     "allow": [
+      "Read(~/agents/**)",
+      "Edit(~/agents/**)",
+
       "Bash(git status *)",
       "Bash(git diff *)",
       "Bash(git log *)",

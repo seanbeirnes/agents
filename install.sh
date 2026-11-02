@@ -85,6 +85,14 @@ link "$repo/opencode/opencode.json" "$opencode_dir/opencode.json"
 link "$repo/opencode/commands" "$opencode_dir/commands"
 link "$repo/opencode/plugins/guard.ts" "$opencode_dir/plugins/guard.ts"
 
+say "== Session notes directory (see Session State in AGENTS.md)"
+if [ -d "$HOME/agents" ]; then
+	say "ok       $HOME/agents"
+else
+	run mkdir -p "$HOME/agents"
+	[ $dry_run = 1 ] || say "created  $HOME/agents"
+fi
+
 say "== Claude settings (merged into $claude_dir/settings.json)"
 settings="$claude_dir/settings.json"
 existing='{}'
@@ -97,8 +105,10 @@ fi
 
 # Repo keys win, except permission lists, which are combined so rules you
 # added locally survive. Any old guard hook entry is replaced with this one.
-merged=$(printf '%s' "$existing" | jq --slurpfile repo "$repo/claude/settings.json" --arg dir "$repo" '
-	($repo[0] | .hooks.PreToolUse[].hooks[].command |= sub("__AGENTS_DIR__"; $dir)) as $new
+merged=$(printf '%s' "$existing" | jq --slurpfile repo "$repo/claude/settings.json" --arg dir "$repo" --arg home "$HOME" '
+	($repo[0]
+		| .hooks.PreToolUse[].hooks[].command |= sub("__AGENTS_DIR__"; $dir)
+		| .permissions.additionalDirectories |= map(sub("^~"; $home))) as $new
 	| . as $old
 	| ($old * ($new | del(.permissions, .hooks)))
 	| .permissions = (($old.permissions // {}) * ($new.permissions | with_entries(
