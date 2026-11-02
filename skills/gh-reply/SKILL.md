@@ -1,5 +1,5 @@
 ---
-name: github-reply
+name: gh-reply
 description: Draft or post comments and replies to GitHub issues, pull requests, and reviews on the user's behalf, always prefixed with the required AI disclaimer. Use when the user asks to reply to, comment on, respond to, or review a GitHub issue or PR, or when running `gh issue comment`, `gh pr comment`, or `gh pr review`.
 compatibility: opencode
 ---

@@ -36,11 +36,11 @@ The executable path is stored only in the clone's `.git/config`; it is not commi
 | `/grill-me` | Stress-test a plan, decision, or idea through structured questions. |
 | `/teach` | Create a workspace-based learning path for a skill or concept. |
 
-Commands are thin entry points in `commands/`. Their detailed workflows live in the corresponding `skills/` directories.
+Commands are thin entry points in `opencode/commands/`. Their detailed workflows live in the corresponding `skills/` directories.
 
 ## Safety Defaults
 
-`opencode.json` limits destructive or remote operations:
+`opencode/opencode.json` limits destructive or remote operations:
 
 - Denies pushes, hard resets, forced branch deletion, repository deletion, pull-request merges, and secret management.
 - Requires confirmation for rebases, amended commits, pull-request edits, issue closure, and release creation.
@@ -54,10 +54,11 @@ Review these permissions before adapting the configuration to your own workflow.
 .
 ├── .githooks/      # Versioned local Git hooks
 ├── .github/        # GitHub Actions workflows
-├── commands/       # Slash-command entry points
+├── opencode/
+│   ├── commands/       # Slash-command entry points
+│   └── opencode.json   # OpenCode permissions and configuration
 ├── skills/         # Reusable agent workflows and supporting files
 ├── LICENSE         # Repository-wide MIT license
-├── opencode.json   # OpenCode permissions and configuration
 └── README.md
 ```
 
@@ -67,4 +68,4 @@ Original content in this repository is available under the [MIT License](LICENSE
 
 ## Credits
 
-The `prototype`, `grilling`, and `teach` skills are adapted from [Matt Pocock's skills repository](https://github.com/mattpocock/skills). See each skill's metadata and license for details.
+The `prototype`, `grill-me`, and `teach` skills are adapted from [Matt Pocock's skills repository](https://github.com/mattpocock/skills). See each skill's metadata and license for details.

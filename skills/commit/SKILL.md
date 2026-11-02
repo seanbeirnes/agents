@@ -1,5 +1,5 @@
 ---
-name: git-commit
+name: commit
 description: Analyze staged Git changes, draft a succinct conventional commit title, and commit the changes.
 compatibility: opencode
 ---
