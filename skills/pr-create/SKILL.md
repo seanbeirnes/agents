@@ -18,6 +18,12 @@ base branch, title guidance, or a request for a draft pull request.
   the branch, since it isn't in the diff.
 - **Only claim verification that actually ran.** Never imply a test ran because
   its file appears in the diff.
+- **Focus on the WHY not the HOW.** The description says why the code changes
+  are there. The code can speak for itself on how it works.
+- **Visuals are helpful.** When the PR changes structure or design, include
+  mermaid diagrams in the "Summary" section to visualize the structural changes
+  and system design decisions it makes. Keep the diagram count under three,
+  preferably only one. Skip diagrams for small or mechanical changes.
 - **No AI attribution.** No "Generated with" footer or similar.
 - **Use `gh` only.** If it's unavailable, don't fall back to another API.
 
@@ -55,6 +61,8 @@ did.
 
 [1-5 sentences overview]
 
+[optional mermaid diagram of structural or design changes]
+
 # Changes
 
 - One point per meaningful change
@@ -65,7 +73,8 @@ did.
 [tests added or updated, and verification actually run]
 ```
 
-- Replace every placeholder with concrete information. One focused bullet per
+- Replace every placeholder with concrete information, or remove the optional
+  diagram placeholder when no diagram is needed. One focused bullet per
   meaningful change.
 - In **Testing**, report two things separately when they apply:
   - test changes, as seen in the diff
