@@ -49,11 +49,40 @@ from my request.
 Each project directory looks like this:
 
 - `plan.md`: the project's big-picture plan
+- `repos/<name>`: a symlink to each repository the project works in (my
+  checkout, e.g. `~/Desktop/repos/myapp`)
 - `agent-<name>/`: one directory per agent, named after the agent's task
   (inferred from the request, e.g. `agent-guard-script`)
   - `notes.md`
   - `plan.md`
   - `next-steps.md`
+  - `worktree/`: the agent's own git worktree, when its task changes code
+
+### Working alongside other agents
+
+- Edit only your own `agent-<name>/` directory and worktree, plus your own row
+  of the board in the root `plan.md`. Read everything else, but don't change it.
+- Never edit my checkout in `repos/<name>`. Create your worktree from it with
+  `git -C repos/<name> worktree add ../../agent-<name>/worktree -b <branch>`,
+  where the branch includes the project ID (e.g. `feat/PROJ-123-api`).
+- When you start or resume, read the root `plan.md` and the other agents'
+  `notes.md` and `next-steps.md`.
+- If your task needs a change in another agent's area, don't make it. Write it
+  in your `next-steps.md` and tell me.
+- Never send input to another agent's terminal, for example through `herdr pane
+  run` or `herdr agent prompt`, to answer its questions or approve its prompts.
+  Only send input to panes you created.
+
+### The board
+
+The root `plan.md` splits the project into pieces, one per agent, with a board:
+
+| Piece | Agent | Model | Branch | Status |
+| --- | --- | --- | --- | --- |
+| Discount model and API | agent-api | opus | `feat/PROJ-123-api` | not started |
+
+Split along module or file boundaries so agents' changes don't overlap. Status
+is one of `not started`, `in progress`, `blocked`, or `done`.
 
 ### notes.md
 
@@ -73,8 +102,12 @@ implemented.
 
 ### next-steps.md
 
-When the agent finishes or stops, it lists the open questions and anything that
-needs my input or approval here, so it can resume later without prior context.
+The open questions, anything that needs my input or approval, and what to do
+next, so the agent can resume later without prior context.
+
+Sessions can end without warning (a crash, a reboot, a full context window), so
+keep `notes.md` and `next-steps.md` current: update them after each milestone
+and before asking me anything, not only when you finish.
 
 ## Git
 
