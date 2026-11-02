@@ -1,0 +1,42 @@
+name: Scripts
+
+on:
+  pull_request:
+  push:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    name: ShellCheck
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+
+      - name: Lint shell scripts
+        run: shellcheck --shell=sh install.sh hooks/*.sh
+
+  test:
+    name: Guard tests (${{ matrix.os }})
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+
+      - name: Run guard tests
+        run: sh hooks/guard.test.sh
+
+      - name: Validate JSON config
+        run: |
+          jq -e . claude/settings.json > /dev/null
+          jq -e . opencode/opencode.json > /dev/null
+
+      - name: Dry-run the installer
+        run: HOME="$RUNNER_TEMP/home" ./install.sh --dry-run

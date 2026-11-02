@@ -1,28 +1,67 @@
 ---
 name: pr-create
-description: Analyze the current branch, draft a pull request, and create it with GitHub CLI when available.
-compatibility: opencode
+description: Analyze the current branch, draft a pull request with the required Summary/Changes/Testing description, and create it with GitHub CLI when available. Use when the user asks to open, create, or describe a pull request.
 ---
 
-## What I do
+# Create a pull request
 
-I analyze the current branch, draft an accurate pull-request title and description, and create the pull request with GitHub CLI by default. If GitHub CLI is unavailable, unauthenticated, or unable to create the pull request, I provide the completed title and description without claiming that a pull request was created.
-I do not run when the branch is on `main` or `master`.
+Draft an accurate title and description for the current branch, then create
+the pull request with `gh`. Treat `$ARGUMENTS` as optional context, such as the
+base branch, title guidance, or a request for a draft pull request.
 
-## Workflow
+## Rules
 
-1. Identify the current Git repository and branch. If the branch is on `main` or `master`, alert the user and stop.
-2. Interpret any user-provided arguments as optional context, such as the base branch, title guidance, or whether to create a draft pull request.
-3. Identify the upstream or default base branch and its merge base with the current branch. Inspect the complete committed branch diff, changed files, and commit messages. Include uncommitted changes only when the user explicitly requests working-tree analysis.
-4. When `gh` is available and authenticated, check whether the current branch already has an associated pull request. If one exists with an empty body, retain its number and continue so it can be updated in step 11. If one exists with a non-empty body, alert the user by stating the URL and a PR content summary, then stop.
-5. Review available test results and inspect the diff for added, modified, renamed, or removed test files and test cases. Infer test coverage changes from the code changes without claiming that inferred tests were executed.
-6. Draft one concise pull-request title that reflects the primary purpose of the branch.
-7. Draft the description using this exact template:
+- **Never run on `main` or `master`.** Tell the user and stop.
+- **Describe the branch, not the session.** Base the description on the
+  committed diff against the base branch. Include uncommitted changes only if
+  the user asks. Leave out anything that was added and then removed again on
+  the branch, since it isn't in the diff.
+- **Only claim verification that actually ran.** Never imply a test ran because
+  its file appears in the diff.
+- **Focus on the WHY not the HOW.** The description says why the code changes
+  are there. The code can speak for itself on how it works.
+- **Visuals are helpful.** When the PR changes structure or design, include
+  mermaid diagrams in the "Summary" section to visualize the structural changes
+  and system design decisions it makes. Keep the diagram count under three,
+  preferably only one. Skip diagrams for small or mechanical changes.
+- **No AI attribution.** No "Generated with" footer or similar.
+- **Use `gh` only.** If it's unavailable, don't fall back to another API.
+
+## Steps
+
+1. Find the base branch (the upstream, or the repository's default) and the
+   merge base. Read the full branch diff, the changed files, and the commit
+   titles.
+2. Check whether the branch already has a pull request (`gh pr view`).
+   - If it has one with an empty body, keep its number; you'll fill it in at
+     step 6.
+   - If it has one with a non-empty body, give the user its URL and a short
+     summary of it, then stop.
+3. Look at what changed in tests (added, updated, renamed, or removed) and at
+   any verification that actually ran in this session.
+4. Write a short title for the branch's main purpose, and the description using
+   the template below.
+5. Show the user the full title and description.
+6. Publish it:
+   - Existing pull request with an empty body: `gh pr edit <number>` with the
+     title and body.
+   - Otherwise: make sure the branch is on the remote, then `gh pr create` with
+     the title and body, plus any base branch or draft flag the user asked for.
+7. Report the pull request's URL.
+
+If `gh` is missing, not authenticated, or fails, say why. Then copy the
+description to the clipboard with the first of these that works: `pbcopy`,
+`wl-copy`, `xclip -selection clipboard`. Say which one worked, or that none
+did.
+
+## Description template
 
 ```markdown
 # Summary
 
 [1-5 sentences overview]
+
+[optional mermaid diagram of structural or design changes]
 
 # Changes
 
@@ -34,24 +73,12 @@ I do not run when the branch is on `main` or `master`.
 [tests added or updated, and verification actually run]
 ```
 
-8. Replace every bracketed placeholder with concrete information. Keep the summary to 1–5 sentences and include one focused bullet for each meaningful change.
-9. In `# Testing`, report both forms of evidence separately when applicable:
-   - Tests added, updated, renamed, or removed, as inferred from the branch diff.
-   - Test, lint, build, or manual verification commands actually run and their outcomes.
-   Never imply that a test was run merely because its file or case appears in the diff. If test coverage changed but no verification ran, describe the test changes and state `Not run in this session.` If no test coverage changed and no verification ran, write `Not run (not requested).`
-10. Show the complete title and Markdown description before attempting creation or update.
-11. If an existing pull request with an empty body was found, run `gh pr edit <number>` with the generated title and body to populate it. Otherwise, if `gh` is available and authenticated, ensure the branch is available on its remote, then run `gh pr create` with the generated title and body. Apply any user-requested base branch or draft status when creating a pull request. Do not use an alternative hosting API when `gh` is unavailable.
-12. If creation or update succeeds, report the pull-request URL. If `gh` is unavailable, unauthenticated, or the operation fails, clearly report why and fall back to providing the title and description only.
-13. On fallback, copy the exact Markdown description to the system clipboard. Try these commands in order, stopping after the first available command succeeds:
-
-```sh
-pbcopy
-wl-copy
-xclip -selection clipboard
-```
-
-Pipe the description to the command without modifying its content. Confirm which clipboard command succeeded. If none are installed or copying fails, clearly report that the description was shown but could not be copied.
-
-## When to use me
-
-Use this skill when the user asks to create a pull request for the current branch. Provide the title and description without creation only when GitHub CLI cannot create the pull request or the user explicitly requests description-only output.
+- Replace every placeholder with concrete information, or remove the optional
+  diagram placeholder when no diagram is needed. One focused bullet per
+  meaningful change.
+- In **Testing**, report two things separately when they apply:
+  - test changes, as seen in the diff
+  - commands actually run (tests, lint, build, manual checks) and their results
+- If tests changed but nothing was run, describe the changes and write
+  `Not run in this session.` If nothing changed and nothing was run, write
+  `Not run (not requested).`

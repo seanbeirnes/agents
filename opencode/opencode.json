@@ -1,0 +1,74 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "permission": {
+    "external_directory": {
+      "~/agents/**": "allow"
+    },
+    "read": {
+      "*": "allow",
+      "*.env": "ask",
+      "*.env.*": "ask",
+      "*.env.example": "allow"
+    },
+    "edit": {
+      "*": "allow",
+      "*.env": "ask",
+      "*.env.*": "ask",
+      "*.env.example": "allow"
+    },
+    "bash": {
+      "git push": "ask",
+      "git push *": "ask",
+      "git commit --amend*": "ask",
+      "git rebase*": "ask",
+      "git merge*": "ask",
+      "git cherry-pick*": "ask",
+      "git reset --hard*": "ask",
+      "git clean*": "ask",
+      "git branch -D*": "ask",
+      "git stash drop*": "ask",
+      "git stash clear*": "ask",
+      "git tag -d*": "ask",
+      "git filter-branch*": "ask",
+      "git update-ref*": "ask",
+
+      "gh pr create*": "ask",
+      "gh pr merge*": "ask",
+      "gh pr close*": "ask",
+      "gh pr edit*": "ask",
+      "gh pr comment*": "ask",
+      "gh pr review*": "ask",
+      "gh issue comment*": "ask",
+      "gh issue close*": "ask",
+      "gh release create*": "ask",
+      "gh run delete*": "ask",
+      "gh workflow run*": "ask",
+      "gh api*": "ask",
+      "gh secret*": "ask",
+      "gh auth*": "ask",
+
+      "sudo*": "ask",
+      "npm publish*": "ask",
+      "darwin-rebuild*": "ask",
+      "nixos-rebuild*": "ask",
+      "home-manager switch*": "ask",
+      "nix-collect-garbage*": "ask",
+      "apt *": "ask",
+      "apt-get *": "ask",
+      "docker system prune*": "ask",
+
+      "git push *--force*": "deny",
+      "git push -f*": "deny",
+      "git push * -f*": "deny",
+      "git push * +*": "deny",
+      "git reflog expire*": "deny",
+      "git gc --prune*": "deny",
+      "gh repo delete*": "deny",
+      "gh release delete*": "deny",
+      "mkfs*": "deny",
+      "dd *of=/dev/*": "deny",
+      "diskutil erase*": "deny",
+      "diskutil zeroDisk*": "deny"
+    }
+  }
+}
