@@ -44,7 +44,7 @@ OpenCode discovers skills in `~/.claude/skills/` natively, so skills are linked 
 
 | Skill | Purpose |
 | --- | --- |
-| `/commit` | Draft a conventional commit title for staged changes and commit them. |
+| `/commit` | Split changes into focused commits, each with a descriptive conventional-commit title. |
 | `/pr-create` | Analyze the current branch, draft a pull request, and create it with GitHub CLI. |
 | `/gh-reply` | Draft or post a GitHub issue or PR reply, prefixed with an AI disclaimer. |
 | `/call-tree` | Draw an ASCII call-tree diagram of a file, feature, or pull request. |
