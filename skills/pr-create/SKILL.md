@@ -1,7 +1,6 @@
 ---
 name: pr-create
-description: Analyze the current branch, draft a pull request, and create it with GitHub CLI when available.
-compatibility: opencode
+description: Analyze the current branch, draft a pull request with the required Summary/Changes/Testing description, and create it with GitHub CLI when available. Use when the user asks to open, create, or describe a pull request.
 ---
 
 ## What I do
@@ -34,7 +33,7 @@ I do not run when the branch is on `main` or `master`.
 [tests added or updated, and verification actually run]
 ```
 
-8. Replace every bracketed placeholder with concrete information. Keep the summary to 1–5 sentences and include one focused bullet for each meaningful change.
+8. Replace every bracketed placeholder with concrete information. Keep the summary to 1–5 sentences and include one focused bullet for each meaningful change. Leave out changes that were added and then removed again on the branch, since they are not in the diff against the base. Do not add a "Generated with" footer or any other AI attribution.
 9. In `# Testing`, report both forms of evidence separately when applicable:
    - Tests added, updated, renamed, or removed, as inferred from the branch diff.
    - Test, lint, build, or manual verification commands actually run and their outcomes.

@@ -2,7 +2,6 @@
 name: teach
 description: Teach the user a new skill or concept within this workspace. Use only when explicitly requested.
 license: MIT
-compatibility: opencode
 metadata:
   author: Matt Pocock
   source: https://github.com/mattpocock/skills/tree/main/skills/productivity/teach
