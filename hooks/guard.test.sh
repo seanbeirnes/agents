@@ -1,4 +1,5 @@
 #!/bin/sh
+# shellcheck disable=SC2016 # test inputs contain literal $VARS on purpose
 # Tests for guard.sh. Run: sh hooks/guard.test.sh
 # Each case: expected exit status (0 allow, 2 block, 3 ask), mode, input.
 
