@@ -20,6 +20,7 @@ The installer is safe to rerun:
 - Files and folders are **symlinked**, so edits in the repository apply right away. Anything already in the way is moved to `<name>.backup-<time>`, never deleted.
 - `~/.claude/settings.json` is **merged**, not replaced. Your own settings (theme, voice, and so on) are kept, and permission rules you added locally are kept alongside the repository's.
 - If `~/.config/opencode` is still a clone of this repository (the old setup), the installer stops and tells you to move it aside first.
+- It creates `~/agents/`, where agents keep session notes and plans (see Session State in `AGENTS.md`). Both tools are allowed to read and write there without prompting.
 
 The repository can live anywhere; the links point to wherever you cloned it. If you move it, rerun `./install.sh`.
 
