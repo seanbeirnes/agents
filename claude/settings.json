@@ -1,0 +1,112 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "autoMemoryEnabled": false,
+  "attribution": {
+    "commit": "",
+    "pr": ""
+  },
+  "permissions": {
+    "allow": [
+      "Bash(git status *)",
+      "Bash(git diff *)",
+      "Bash(git log *)",
+      "Bash(git show *)",
+      "Bash(git blame *)",
+      "Bash(git branch *)",
+      "Bash(git rev-parse *)",
+      "Bash(git merge-base *)",
+      "Bash(git ls-files *)",
+      "Bash(git grep *)",
+      "Bash(git remote -v)",
+      "Bash(git fetch *)",
+      "Bash(git stash list *)",
+      "Bash(git stash push *)",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(git switch *)",
+      "Bash(git checkout -b *)",
+
+      "Bash(gh pr view *)",
+      "Bash(gh pr list *)",
+      "Bash(gh pr diff *)",
+      "Bash(gh pr checks *)",
+      "Bash(gh pr status *)",
+      "Bash(gh issue view *)",
+      "Bash(gh issue list *)",
+      "Bash(gh run view *)",
+      "Bash(gh run list *)",
+      "Bash(gh repo view *)"
+    ],
+    "ask": [
+      "Read(//**/.env)",
+      "Edit(//**/.env)",
+
+      "Bash(git push *)",
+      "Bash(git commit --amend*)",
+      "Bash(git rebase *)",
+      "Bash(git merge *)",
+      "Bash(git cherry-pick *)",
+      "Bash(git reset --hard*)",
+      "Bash(git clean *)",
+      "Bash(git branch -D*)",
+      "Bash(git stash drop*)",
+      "Bash(git stash clear*)",
+      "Bash(git tag -d*)",
+      "Bash(git filter-branch *)",
+      "Bash(git update-ref *)",
+
+      "Bash(gh pr create *)",
+      "Bash(gh pr merge *)",
+      "Bash(gh pr close *)",
+      "Bash(gh pr edit *)",
+      "Bash(gh pr comment *)",
+      "Bash(gh pr review *)",
+      "Bash(gh issue comment *)",
+      "Bash(gh issue close *)",
+      "Bash(gh release create *)",
+      "Bash(gh run delete *)",
+      "Bash(gh workflow run *)",
+      "Bash(gh api *)",
+      "Bash(gh secret *)",
+      "Bash(gh auth *)",
+
+      "Bash(sudo *)",
+      "Bash(npm publish *)",
+      "Bash(darwin-rebuild *)",
+      "Bash(nixos-rebuild *)",
+      "Bash(home-manager switch *)",
+      "Bash(nix-collect-garbage *)",
+      "Bash(apt *)",
+      "Bash(apt-get *)",
+      "Bash(docker system prune *)"
+    ],
+    "deny": [
+      "Bash(git push *--force*)",
+      "Bash(git push -f*)",
+      "Bash(git push * -f*)",
+      "Bash(git push * +*)",
+      "Bash(git reflog expire *)",
+      "Bash(git gc --prune*)",
+      "Bash(gh repo delete *)",
+      "Bash(gh release delete *)",
+      "Bash(mkfs*)",
+      "Bash(dd *of=/dev/*)",
+      "Bash(diskutil erase*)",
+      "Bash(diskutil zeroDisk*)"
+    ]
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash|Read|Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "__AGENTS_DIR__/hooks/claude-guard.sh",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
+}
