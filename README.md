@@ -48,9 +48,6 @@ OpenCode discovers skills in `~/.claude/skills/` natively, so skills are linked 
 | `/pr-create` | Analyze the current branch, draft a pull request, and create it with GitHub CLI. |
 | `/gh-reply` | Draft or post a GitHub issue or PR reply, prefixed with an AI disclaimer. |
 | `/call-tree` | Draw an ASCII call-tree diagram of a file, feature, or pull request. |
-| `/prototype` | Build a throwaway logic or UI prototype to answer a design question. |
-| `/grill-me` | Stress-test a plan, decision, or idea through structured questions. |
-| `/teach` | Create a workspace-based learning path for a skill or concept. |
 
 Claude Code exposes each skill as a slash command directly. OpenCode uses the thin wrappers in `opencode/commands/`, so the names match in both tools.
 
@@ -111,8 +108,4 @@ The executable path is stored only in the clone's `.git/config`; it is not commi
 
 ## License
 
-Original content in this repository is available under the [MIT License](LICENSE). Adapted skills remain subject to the license and attribution included in their respective directories.
-
-## Credits
-
-The `prototype`, `grill-me`, and `teach` skills are adapted from [Matt Pocock's skills repository](https://github.com/mattpocock/skills). See each skill's metadata and license for details.
+Available under the [MIT License](LICENSE).
