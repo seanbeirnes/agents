@@ -63,7 +63,9 @@ Each project directory looks like this:
 - Edit only your own `agent-<name>/` directory and worktree, plus your own row
   of the board in the root `plan.md`. Read everything else, but don't change it.
 - Never edit my checkout in `repos/<name>`. Create your worktree from it with
-  `git -C repos/<name> worktree add ../../agent-<name>/worktree -b <branch>`,
+  absolute paths, because git resolves relative ones from the real checkout
+  behind the symlink:
+  `git -C ~/agents/<project>/repos/<name> worktree add ~/agents/<project>/agent-<name>/worktree -b <branch>`,
   where the branch includes the project ID (e.g. `feat/PROJ-123-api`).
 - When you start or resume, read the root `plan.md` and the other agents'
   `notes.md` and `next-steps.md`.
