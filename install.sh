@@ -5,6 +5,9 @@
 #
 # Safe to rerun. Existing files in the way are moved to <name>.backup-<time>,
 # never deleted. ~/.claude/settings.json is merged, not replaced.
+# Skills from a private repository are linked too, if one is found next to
+# this one (<this repo>-private, e.g. ~/.config/agents-private) or at
+# $AGENTS_PRIVATE_DIR.
 # Needs: POSIX sh, ln, and jq (for the settings merge).
 
 set -eu
@@ -12,6 +15,7 @@ set -eu
 repo=$(cd "$(dirname "$0")" && pwd)
 claude_dir="$HOME/.claude"
 opencode_dir="${XDG_CONFIG_HOME:-$HOME/.config}/opencode"
+private_dir=${AGENTS_PRIVATE_DIR:-${repo}-private}
 stamp=$(date +%Y%m%d-%H%M%S)
 dry_run=0
 
@@ -79,6 +83,23 @@ for skill in "$repo"/skills/*/; do
 	name=$(basename "$skill")
 	link "$repo/skills/$name" "$claude_dir/skills/$name"
 done
+
+say "== Private skills"
+if [ -d "$private_dir/skills" ]; then
+	private_dir=$(cd "$private_dir" && pwd) # links must be absolute
+	for skill in "$private_dir"/skills/*/; do
+		[ -d "$skill" ] || continue # no skills yet: the glob stays unexpanded
+		name=$(basename "$skill")
+		# The shared skill wins; linking both would swap the link on every run.
+		if [ -e "$repo/skills/$name" ]; then
+			say "skip     $private_dir/skills/$name (a shared skill has the same name)"
+			continue
+		fi
+		link "$private_dir/skills/$name" "$claude_dir/skills/$name"
+	done
+else
+	say "skip     no private repo at $private_dir"
+fi
 
 say "== OpenCode"
 link "$repo/opencode/opencode.json" "$opencode_dir/opencode.json"
