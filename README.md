@@ -24,24 +24,12 @@ The installer is safe to rerun:
 
 The repository can live anywhere; the links point to wherever you cloned it. If you move it, rerun `./install.sh`.
 
-### Private skills
-
-Skills that can't be public live in a separate private repository with the same `skills/<name>/` layout and no scripts of its own. Clone it next to this one, with `-private` added to the folder name, and the installer links its skills too:
-
-```sh
-git clone git@github.com:seanbeirnes/agents-private.git ~/.config/agents-private
-~/.config/agents/install.sh
-```
-
-To keep it somewhere else, set `AGENTS_PRIVATE_DIR=/path/to/it` when running the installer. Without a private repository, the installer skips this step. If a private skill has the same name as a shared one, the shared skill is linked and the private one is skipped.
-
 ### What gets linked
 
 | Repository | Claude Code | OpenCode |
 | --- | --- | --- |
 | `AGENTS.md` | `~/.claude/CLAUDE.md` | `~/.config/opencode/AGENTS.md` |
 | `skills/<name>/` | `~/.claude/skills/<name>/` | read from `~/.claude/skills/` |
-| private repo's `skills/<name>/` | `~/.claude/skills/<name>/` | read from `~/.claude/skills/` |
 | `claude/settings.json` | merged into `~/.claude/settings.json` | |
 | `opencode/opencode.json` | | `~/.config/opencode/opencode.json` |
 | `opencode/commands/` | | `~/.config/opencode/commands/` |
