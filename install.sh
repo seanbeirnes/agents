@@ -5,9 +5,9 @@
 #
 # Safe to rerun. Existing files in the way are moved to <name>.backup-<time>,
 # never deleted. ~/.claude/settings.json is merged, not replaced.
-# Skills from a private repository are linked too, if one is found next to
-# this one (<this repo>-private, e.g. ~/.config/agents-private) or at
-# $AGENTS_PRIVATE_DIR.
+# Skills from the private agents-private repository are linked too. It's
+# cloned next to this one (<this repo>-private, or $AGENTS_PRIVATE_DIR) if
+# missing; without access, that step is skipped.
 # Needs: POSIX sh, ln, and jq (for the settings merge).
 
 set -eu
@@ -15,6 +15,7 @@ set -eu
 repo=$(cd "$(dirname "$0")" && pwd)
 claude_dir="$HOME/.claude"
 opencode_dir="${XDG_CONFIG_HOME:-$HOME/.config}/opencode"
+private_url=git@github.com:seanbeirnes/agents-private.git
 private_dir=${AGENTS_PRIVATE_DIR:-${repo}-private}
 stamp=$(date +%Y%m%d-%H%M%S)
 dry_run=0
@@ -85,6 +86,14 @@ for skill in "$repo"/skills/*/; do
 done
 
 say "== Private skills"
+if [ ! -d "$private_dir" ]; then
+	# Most machines won't have access; git's error would only be noise.
+	if run git clone --quiet "$private_url" "$private_dir" 2>/dev/null; then
+		[ $dry_run = 1 ] || say "cloned   $private_url -> $private_dir"
+	else
+		say "skip     no access to $private_url"
+	fi
+fi
 if [ -d "$private_dir/skills" ]; then
 	private_dir=$(cd "$private_dir" && pwd) # links must be absolute
 	for skill in "$private_dir"/skills/*/; do
@@ -97,8 +106,6 @@ if [ -d "$private_dir/skills" ]; then
 		fi
 		link "$private_dir/skills/$name" "$claude_dir/skills/$name"
 	done
-else
-	say "skip     no private repo at $private_dir"
 fi
 
 say "== OpenCode"
